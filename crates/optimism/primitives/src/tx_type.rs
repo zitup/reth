@@ -28,6 +28,22 @@ use reth_primitives_traits::{InMemorySize, TxType};
 #[into(u8)]
 pub struct OpTxType(AlloyOpTxType);
 
+impl<'a> reth_primitives::arbitrary::Arbitrary<'a> for OpTxType {
+    fn arbitrary(
+        u: &mut reth_primitives::arbitrary::Unstructured<'a>,
+    ) -> reth_primitives::arbitrary::Result<Self> {
+        let tx = match AlloyOpTxType::arbitrary(u)? {
+            AlloyOpTxType::Legacy => Self(AlloyOpTxType::Legacy),
+            AlloyOpTxType::Eip2930 => Self(AlloyOpTxType::Eip2930),
+            AlloyOpTxType::Eip1559 => Self(AlloyOpTxType::Eip1559),
+            AlloyOpTxType::Eip7702 => Self(AlloyOpTxType::Eip7702),
+            AlloyOpTxType::Deposit => Self(AlloyOpTxType::Deposit),
+        };
+
+        Ok(tx)
+    }
+}
+
 impl TxType for OpTxType {
     #[inline]
     fn is_legacy(&self) -> bool {
