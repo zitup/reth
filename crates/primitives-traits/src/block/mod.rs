@@ -7,7 +7,7 @@ use alloc::fmt;
 
 use reth_codecs::Compact;
 
-use crate::{BlockHeader, FullBlockHeader, InMemorySize, MaybeSerde};
+use crate::{BlockHeader, FullBlockHeader, InMemorySize, MaybeSerde, MaybeArbitrary};
 
 /// Helper trait that unifies all behaviour required by block to support full node operations.
 pub trait FullBlock: Block<Header: Compact> {}
@@ -20,7 +20,7 @@ impl<T> FullBlock for T where T: Block<Header: FullBlockHeader> {}
 // senders
 #[auto_impl::auto_impl(&, Arc)]
 pub trait Block:
-    Send + Sync + Unpin + Clone + Default + fmt::Debug + PartialEq + Eq + InMemorySize + MaybeSerde
+    Send + Sync + Unpin + Clone + Default + fmt::Debug + PartialEq + Eq + InMemorySize + MaybeSerde + MaybeArbitrary
 {
     /// Header part of the block.
     type Header: BlockHeader + 'static;
