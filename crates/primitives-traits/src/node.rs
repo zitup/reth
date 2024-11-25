@@ -1,7 +1,8 @@
 use core::fmt;
 
 use crate::{
-    FullBlock, FullBlockBody, FullBlockHeader, FullReceipt, FullSignedTx, FullTxType, MaybeSerde,
+    FullBlock, FullBlockBody, FullBlockHeader, FullReceipt, FullSignedTx, FullTxType,
+    MaybeArbitrary, MaybeSerde,
 };
 
 /// Configures all the primitive types of the node.
@@ -18,6 +19,7 @@ pub trait NodePrimitives:
         + PartialEq
         + Eq
         + MaybeSerde
+        + MaybeArbitrary
         + 'static;
     /// Block header primitive.
     type BlockHeader: Send
@@ -29,6 +31,7 @@ pub trait NodePrimitives:
         + PartialEq
         + Eq
         + MaybeSerde
+        + MaybeArbitrary
         + 'static;
     /// Block body primitive.
     type BlockBody: Send
@@ -40,11 +43,30 @@ pub trait NodePrimitives:
         + PartialEq
         + Eq
         + MaybeSerde
+        + MaybeArbitrary
         + 'static;
     /// Signed version of the transaction type.
-    type SignedTx: Send + Sync + Unpin + Clone + fmt::Debug + PartialEq + Eq + MaybeSerde + 'static;
+    type SignedTx: Send
+        + Sync
+        + Unpin
+        + Clone
+        + fmt::Debug
+        + PartialEq
+        + Eq
+        + MaybeSerde
+        + MaybeArbitrary
+        + 'static;
     /// Transaction envelope type ID.
-    type TxType: Send + Sync + Unpin + Clone + Default + fmt::Debug + PartialEq + Eq + 'static;
+    type TxType: Send
+        + Sync
+        + Unpin
+        + Clone
+        + Default
+        + fmt::Debug
+        + PartialEq
+        + Eq
+        + MaybeArbitrary
+        + 'static;
     /// A receipt.
     type Receipt: Send
         + Sync
@@ -55,6 +77,7 @@ pub trait NodePrimitives:
         + PartialEq
         + Eq
         + MaybeSerde
+        + MaybeArbitrary
         + 'static;
 }
 
